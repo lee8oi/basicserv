@@ -1,8 +1,8 @@
 # BasicServ
-A basic web server written in Go. Intended as a simple starting point for secure website & web application projects.
-* Demonstrates the basic use of Go's http (with TLS).
-* Automatically redirects http to https to force the use of SSL security.
-* Includes fileserver for hosting files (useful for HTML, CSS, JavaScript, etc used in web pages).
+A simple web server written in Go. Intended as a basic starting point for building a fast & secure web host.
+* Demonstrates the basic use of Go's http package including TLS.
+* Automatically redirects to https url in order to secure web traffic.
+* Includes fileserver (useful for serving additional files needed for webpages).
 
 # Usage
 
@@ -16,8 +16,9 @@ go build
 ```
 
 ##### Start the server.
+(skip the -http & -https switches to use standard ports 80 & 443)
 ```
-basicserv -domain "mydomain.com" -cert "certdir/fullchain.pem" -key "keydir/privkey.pem"
+basicserv -domain "mydomain.com" -cert "certdir/fullchain.pem" -key "keydir/privkey.pem" -http 8080 -https 8081 -pubdir "path/to/pub"
 ```
 
 ##### Test the server.
