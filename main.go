@@ -38,6 +38,9 @@ func main() {
 
 // indexServer serves the index.html.
 func indexServer(w http.ResponseWriter, r *http.Request) {
+	if !checkTLS(r) {
+		http.Redirect(w, r, redirectUrl(), 301)
+	}
 	data, err := ioutil.ReadFile(*public + "/index.html")
 	if err != nil {
 		io.WriteString(w, "<h1>Failed to read index.html!</h1>")
