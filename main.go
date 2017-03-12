@@ -7,7 +7,8 @@ package main
 
 import (
 	"flag"
-	"html/template"
+	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -21,7 +22,7 @@ var public = flag.String("pubdir", "public", "path to public directory")
 
 func main() {
 	flag.Parse()
-	http.Handle("/", http.HandlerFunc(indexServer))
+	http.HandleFunc("/", indexServer)
 	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*public))))
 	go func() {
 		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
@@ -35,22 +36,13 @@ func main() {
 	}
 }
 
-type page struct {
-	Title, Description string
-}
-
-//var home = page
-var indexTemplate = template.Must(template.ParseFiles(*public + "/index.html"))
-
-// indexServer serves the home page to the requesting browser.
+// indexServer serves the index.html.
 func indexServer(w http.ResponseWriter, r *http.Request) {
-	if !checkTLS(r) {
-		http.Redirect(w, r, redirectUrl(), 301)
+	data, err := ioutil.ReadFile(*public + "/index.html")
+	if err != nil {
+		log.Fatal("Failed to read index.html")
 	}
-	indexTemplate.Execute(w, page{
-		Title:       "My Basic Webserver",
-		Description: "A basic secure webserver written in Go (golang.org).",
-	})
+	io.WriteString(w, string(data))
 }
 
 // redirectUrl assembles the https url for redirect to TLS.

@@ -1,6 +1,6 @@
 # BasicServ
 A basic web server written in Go. Intended as a simple starting point for secure website & web application projects.
-* Demonstrates the basic use of Go's http (with TLS), flag, & html/template packages.
+* Demonstrates the basic use of Go's http (with TLS).
 * Automatically redirects http to https to force the use of SSL security.
 * Includes fileserver for hosting files (useful for HTML, CSS, JavaScript, etc used in web pages).
 
