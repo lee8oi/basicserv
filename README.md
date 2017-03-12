@@ -1,5 +1,5 @@
 # basicserv
-Basic secure web server written in Go.
+Basic secure web server written in Go. Designed to automatically redirect to https for better security.
 
 # Usage
 Build the server binary.
