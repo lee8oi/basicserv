@@ -1,5 +1,5 @@
 # basicserv
-Basic web server written in Go (includes TLS).
+Basic secure web server written in Go.
 
 # Usage
 Build the server binary.
