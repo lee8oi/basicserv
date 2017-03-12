@@ -40,9 +40,10 @@ func main() {
 func indexServer(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadFile(*public + "/index.html")
 	if err != nil {
-		log.Fatal("Failed to read index.html")
+		io.WriteString(w, "<h1>Failed to read index.html!</h1>")
+	} else {
+		io.WriteString(w, string(data))
 	}
-	io.WriteString(w, string(data))
 }
 
 // redirectUrl assembles the https url for redirect to TLS.
