@@ -22,9 +22,7 @@ func main() {
 	flag.Parse()
 	http.HandleFunc("/", indexServer)
 	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*pubdir))))
-	go func() {
-		log.Fatal(http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil))
-	}()
+	go log.Fatal(http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil))
 	log.Fatal(http.ListenAndServe(":"+*httpPort, nil))
 }
 
