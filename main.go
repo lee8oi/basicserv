@@ -37,13 +37,13 @@ func main() {
 // indexServer serves the index.html.
 func indexServer(w http.ResponseWriter, r *http.Request) {
 	if !checkTLS(r) {
-		http.Redirect(w, r, redirectUrl(), 301)
+		http.Redirect(w, r, getHttpsUrl(), 301)
 	}
 	http.ServeFile(w, r, *public+"/index.html")
 }
 
-// redirectUrl assembles the https url for redirect to TLS.
-func redirectUrl() string {
+// getHttpsUrl returns the https url used for redirecting from http.
+func getHttpsUrl() string {
 	if *httpsPort == "443" {
 		return "https://" + *domain
 	}
