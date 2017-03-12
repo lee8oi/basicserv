@@ -28,16 +28,18 @@ func main() {
 
 // indexServer serves the index.html.
 func indexServer(w http.ResponseWriter, r *http.Request) {
-	if r.TLS == nil {
-		http.Redirect(w, r, getHttpsUrl(), 301)
-	}
+	redirect(w, r)
 	http.ServeFile(w, r, *pubdir+"/index.html")
 }
 
-// getHttpsUrl returns the servers https url.
-func getHttpsUrl() string {
-	if *httpsPort == "443" {
-		return "https://" + *domain
+// redirect will reroute to https url if TLS not in use.
+func redirect(w http.ResponseWriter, r *http.Request) {
+	if r.TLS == nil {
+		http.Redirect(w, r, func() string {
+			if *httpsPort == "443" {
+				return "https://" + *domain
+			}
+			return "https://" + *domain + ":" + *httpsPort
+		}(), 301)
 	}
-	return "https://" + *domain + ":" + *httpsPort
 }
