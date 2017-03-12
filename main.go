@@ -7,8 +7,6 @@ package main
 
 import (
 	"flag"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -41,12 +39,7 @@ func indexServer(w http.ResponseWriter, r *http.Request) {
 	if !checkTLS(r) {
 		http.Redirect(w, r, redirectUrl(), 301)
 	}
-	data, err := ioutil.ReadFile(*public + "/index.html")
-	if err != nil {
-		io.WriteString(w, "<h1>Failed to read index.html!</h1>")
-	} else {
-		io.WriteString(w, string(data))
-	}
+	http.ServeFile(w, r, *public+"/index.html")
 }
 
 // redirectUrl assembles the https url for redirect to TLS.
