@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		{{if .Title}}
+		<title>{{.Title}}</title>
+		{{end}}
+		<link rel="stylesheet" type="text/css" href="/pub/styles.css">
+	</head>
+	<body>
+	<div id="main">
+		{{if .Title}}
+		<h1>{{.Title}}</h1>
+		{{end}}
+		{{if .Description}}
+			<p>{{.Description}}</p>
+		{{end}}
+	</div>
+	</body>
+</html>
