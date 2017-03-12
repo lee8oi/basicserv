@@ -36,7 +36,7 @@ func indexServer(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, *pubdir+"/index.html")
 }
 
-// getHttpsUrl returns the https url used for redirecting from http.
+// getHttpsUrl returns the servers https url.
 func getHttpsUrl() string {
 	if *httpsPort == "443" {
 		return "https://" + *domain
