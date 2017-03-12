@@ -36,7 +36,7 @@ func main() {
 
 // indexServer serves the index.html.
 func indexServer(w http.ResponseWriter, r *http.Request) {
-	if !checkTLS(r) {
+	if r.TLS == nil {
 		http.Redirect(w, r, getHttpsUrl(), 301)
 	}
 	http.ServeFile(w, r, *pubdir+"/index.html")
@@ -48,12 +48,4 @@ func getHttpsUrl() string {
 		return "https://" + *domain
 	}
 	return "https://" + *domain + ":" + *httpsPort
-}
-
-// checkTLS returns true if TLS handshake is complete or false if not.
-func checkTLS(r *http.Request) bool {
-	if r.TLS != nil && r.TLS.HandshakeComplete {
-		return true
-	}
-	return false
 }
