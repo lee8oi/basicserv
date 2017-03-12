@@ -21,7 +21,7 @@ var public = flag.String("pubdir", "public", "path to public directory")
 
 func main() {
 	flag.Parse()
-	http.Handle("/", http.HandlerFunc(homeServer))
+	http.Handle("/", http.HandlerFunc(indexServer))
 	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*public))))
 	go func() {
 		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
@@ -35,32 +35,30 @@ func main() {
 	}
 }
 
-var homeTemplate = template.Must(template.ParseFiles(*public + "/index.html"))
+type page struct {
+	Title, Description string
+}
 
-// homeServer serves the home page to the requesting browser.
-func homeServer(w http.ResponseWriter, r *http.Request) {
+//var home = page
+var indexTemplate = template.Must(template.ParseFiles(*public + "/index.html"))
+
+// indexServer serves the home page to the requesting browser.
+func indexServer(w http.ResponseWriter, r *http.Request) {
 	if !checkTLS(r) {
 		http.Redirect(w, r, redirectUrl(), 301)
 	}
-	type data struct {
-		Title, Description string
-	}
-	d := data{
+	indexTemplate.Execute(w, page{
 		Title:       "My Basic Webserver",
 		Description: "A basic secure webserver written in Go (golang.org).",
-	}
-	homeTemplate.Execute(w, d)
+	})
 }
 
 // redirectUrl assembles the https url for redirect to TLS.
 func redirectUrl() string {
-	rUrl := "https://"
 	if *httpsPort == "443" {
-		rUrl = rUrl + *domain
-	} else {
-		rUrl = rUrl + *domain + ":" + *httpsPort
+		return "https://" + *domain
 	}
-	return rUrl
+	return "https://" + *domain + ":" + *httpsPort
 }
 
 // checkTLS returns true if TLS handshake is complete or false if not.
