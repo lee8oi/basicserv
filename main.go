@@ -23,15 +23,9 @@ func main() {
 	http.HandleFunc("/", indexServer)
 	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*pubdir))))
 	go func() {
-		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
-		if err != nil {
-			log.Fatal("ListenAndServeTLS:", err)
-		}
+		log.Fatal(http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil))
 	}()
-	err := http.ListenAndServe(":"+*httpPort, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe: ", err)
-	}
+	log.Fatal(http.ListenAndServe(":"+*httpPort, nil))
 }
 
 // indexServer serves the index.html.
