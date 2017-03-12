@@ -16,12 +16,12 @@ var httpsPort = flag.String("https", "443", "https port")
 var certPem = flag.String("cert", "certs/fullchain.pem", "path to cert pem file")
 var keyPem = flag.String("key", "certs/privkey.pem", "path key pem file")
 var domain = flag.String("domain", "localhost", "web domain")
-var public = flag.String("pubdir", "public", "path to public directory")
+var pubdir = flag.String("pubdir", "public", "path to public directory")
 
 func main() {
 	flag.Parse()
 	http.HandleFunc("/", indexServer)
-	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*public))))
+	http.Handle("/pub/", http.StripPrefix("/pub/", http.FileServer(http.Dir(*pubdir))))
 	go func() {
 		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
 		if err != nil {
@@ -39,7 +39,7 @@ func indexServer(w http.ResponseWriter, r *http.Request) {
 	if !checkTLS(r) {
 		http.Redirect(w, r, getHttpsUrl(), 301)
 	}
-	http.ServeFile(w, r, *public+"/index.html")
+	http.ServeFile(w, r, *pubdir+"/index.html")
 }
 
 // getHttpsUrl returns the https url used for redirecting from http.
