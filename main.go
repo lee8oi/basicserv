@@ -6,29 +6,44 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
 
-var httpPort = flag.String("http", "80", "http port")
-var httpsPort = flag.String("https", "443", "https port")
-var certPem = flag.String("cert", "certs/fullchain.pem", "path to cert pem file")
-var keyPem = flag.String("key", "certs/privkey.pem", "path key pem file")
-var domain = flag.String("domain", "localhost", "web domain")
-var pubdir = flag.String("pubdir", "public", "path to public directory")
+var cfgPath = flag.String("config", "config.json", "path to config file (in JSON format)")
 
 func main() {
+	cfg := loadConfig(*cfgPath)
 	flag.Parse()
-	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(*pubdir))))
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(cfg.PubDir))))
 	go func() {
-		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
+		err := http.ListenAndServeTLS(":"+cfg.HttpsPort, cfg.CertPem, cfg.KeyPem, nil)
 		if err != nil {
 			log.Fatal("ListenAndServeTLS:", err)
 		}
 	}()
-	err := http.ListenAndServe(":"+*httpPort, http.RedirectHandler("https://"+*domain+":"+*httpsPort, 301))
+	err := http.ListenAndServe(":"+cfg.HttpPort, http.RedirectHandler("https://"+cfg.Domain+":"+cfg.HttpsPort, 301))
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+}
+
+type config struct {
+	HttpPort, HttpsPort,
+	Domain, PubDir, CertPem, KeyPem string
+}
+
+func loadConfig(path string) (i config) {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = json.Unmarshal(b, &i)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return
 }
