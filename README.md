@@ -11,14 +11,16 @@ On Linux/Unix systems the simplest way to obtain your SSL certificate & key file
 [https://certbot.eff.org/](https://certbot.eff.org/). You'll need the fullchain.pem and the privkey.pem files.
 
 ##### Build the server binary.
-```
-go build
+```Bash
+$ go build
 ```
 
+##### Edit server configuration.
+Rename `config.json.example` file to `config.json` and edit the configuration to suit your needs.
+
 ##### Start the server.
-(skip the -http & -https switches to use standard ports 80 & 443)
-```
-basicserv -domain "mydomain.com" -cert "certdir/fullchain.pem" -key "keydir/privkey.pem" -http 8080 -https 8081 -pubdir "path/to/pub"
+```Bash
+$ basicserv -config "path/to/config.json"
 ```
 
 ##### Test the server.
