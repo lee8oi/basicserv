@@ -2,7 +2,8 @@
 A simple web server written in Go. Intended as a basic starting point for building a fast & secure web host.
 * Demonstrates the basic use of Go's http package including TLS.
 * Automatically redirects to https to secure web traffic.
-* Uses http FileServer handler to host website files.
+* Uses http FileServer handler to serve files.
+* Simple server configuration via json file.
 
 # Usage
 
