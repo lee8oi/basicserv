@@ -20,8 +20,9 @@ var pubdir = flag.String("pubdir", "public", "path to public directory")
 
 func main() {
 	flag.Parse()
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(*pubdir))))
 	go func() {
-		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, http.FileServer(http.Dir(*pubdir)))
+		err := http.ListenAndServeTLS(":"+*httpsPort, *certPem, *keyPem, nil)
 		if err != nil {
 			log.Fatal("ListenAndServeTLS:", err)
 		}
