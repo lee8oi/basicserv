@@ -1,8 +1,8 @@
 # BasicServ
 A simple web server written in Go. Intended as a basic starting point for building a fast & secure web host.
 * Demonstrates the basic use of Go's http package including TLS.
-* Automatically redirects to https url in order to secure web traffic.
-* Includes fileserver (useful for serving additional files needed for webpages).
+* Automatically redirects to https to secure web traffic.
+* Uses http FileServer handler to host website files.
 
 # Usage
 
