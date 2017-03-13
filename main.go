@@ -16,8 +16,8 @@ import (
 var cfgPath = flag.String("config", "config.json", "path to config file (in JSON format)")
 
 func main() {
-	cfg := loadConfig(*cfgPath)
 	flag.Parse()
+	cfg := loadConfig(*cfgPath)
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(cfg.PubDir))))
 	go func() {
 		err := http.ListenAndServeTLS(":"+cfg.HttpsPort, cfg.CertPem, cfg.KeyPem, nil)
