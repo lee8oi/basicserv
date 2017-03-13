@@ -27,12 +27,7 @@ func main() {
 			log.Fatal("ListenAndServeTLS:", err)
 		}
 	}()
-	err := http.ListenAndServe(":"+*httpPort, http.RedirectHandler(func() string {
-		if *httpsPort == "443" {
-			return "https://" + *domain
-		}
-		return "https://" + *domain + ":" + *httpsPort
-	}(), 301))
+	err := http.ListenAndServe(":"+*httpPort, http.RedirectHandler("https://"+*domain+":"+*httpsPort, 301))
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
