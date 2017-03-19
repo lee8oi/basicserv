@@ -18,12 +18,12 @@ func main() {
 	cfg := loadConfig(*cfgPath)
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(cfg.PubDir))))
 	go func() {
-		err := http.ListenAndServeTLS(":"+cfg.HttpsPort, cfg.CertPem, cfg.KeyPem, nil)
+		err := http.ListenAndServeTLS(":"+cfg.HTTPSPort, cfg.CertPem, cfg.KeyPem, nil)
 		if err != nil {
 			log.Fatal("ListenAndServeTLS:", err)
 		}
 	}()
-	err := http.ListenAndServe(":"+cfg.HttpPort, http.RedirectHandler("https://"+cfg.Domain+":"+cfg.HttpsPort, 301))
+	err := http.ListenAndServe(":"+cfg.HTTPPort, http.RedirectHandler("https://"+cfg.Domain+":"+cfg.HTTPSPort, 301))
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
@@ -33,7 +33,7 @@ var cfgPath = flag.String("config", "config.json", "path to config file (in JSON
 
 // config type contains the necessary server configuration strings.
 type config struct {
-	HttpPort, HttpsPort,
+	HTTPPort, HTTPSPort,
 	Domain, PubDir, CertPem, KeyPem string
 }
 
