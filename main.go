@@ -31,17 +31,19 @@ func main() {
 	}
 }
 
+// config type contains the necessary server configuration strings.
 type config struct {
 	HttpPort, HttpsPort,
 	Domain, PubDir, CertPem, KeyPem string
 }
 
-func loadConfig(path string) (i config) {
+// loadConfig loads configuration values from file.
+func loadConfig(path string) (c config) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = json.Unmarshal(b, &i)
+	err = json.Unmarshal(b, &c)
 	if err != nil {
 		log.Fatal(err)
 	}
