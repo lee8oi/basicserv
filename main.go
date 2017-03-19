@@ -13,8 +13,6 @@ import (
 	"net/http"
 )
 
-var cfgPath = flag.String("config", "config.json", "path to config file (in JSON format)")
-
 func main() {
 	flag.Parse()
 	cfg := loadConfig(*cfgPath)
@@ -30,6 +28,8 @@ func main() {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
+
+var cfgPath = flag.String("config", "config.json", "path to config file (in JSON format)")
 
 // config type contains the necessary server configuration strings.
 type config struct {
