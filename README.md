@@ -4,6 +4,7 @@ A simple web server written in Go. Intended as a basic starting point for buildi
 * Automatically redirects to https to secure web traffic.
 * Uses http FileServer handler to serve files.
 * Simple server configuration via json file.
+* HTTP Basic Authentication for simple login capability.
 
 # Usage
 
