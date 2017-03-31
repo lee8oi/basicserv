@@ -21,11 +21,9 @@ var cfgPath = flag.String("config", "config.json", "path to config file (in JSON
 func main() {
 	flag.Parse()
 	cfg := loadConfig(*cfgPath)
-	user := hasher("admin")
-	pass := hasher("123456")
 	//http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(cfg.PubDir))))
 	http.HandleFunc("/", authHandler(fileServer(cfg.PubDir),
-		user, pass, "Please enter your username and password"))
+		hasher(cfg.User), hasher(cfg.Pass), "Please enter your username and password"))
 	go func() {
 		err := http.ListenAndServeTLS(":"+cfg.HTTPSPort, cfg.CertPem, cfg.KeyPem, nil)
 		if err != nil {
@@ -46,7 +44,7 @@ func hasher(s string) []byte {
 
 // config type contains the necessary server configuration strings.
 type config struct {
-	HTTPPort, HTTPSPort,
+	HTTPPort, HTTPSPort, User, Pass,
 	Domain, PubDir, CertPem, KeyPem string
 }
 

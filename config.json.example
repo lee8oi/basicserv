@@ -3,6 +3,8 @@
 	"HTTPSPort": "443",
 	"Domain": "example.com",
 	"PubDir": "public",
+	"User": "admin",
+	"Pass": "12345",
 	"CertPem": "certs/fullchain.pem",
 	"KeyPem": "certs/privkey.pem"
 }
