@@ -21,7 +21,6 @@ var cfgPath = flag.String("config", "config.json", "path to config file (in JSON
 func main() {
 	flag.Parse()
 	cfg := loadConfig(*cfgPath)
-	//http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir(cfg.PubDir))))
 	http.HandleFunc("/", authHandler(fileServer(cfg.PubDir),
 		hasher(cfg.User), hasher(cfg.Pass), "Please enter your username and password"))
 	go func() {
