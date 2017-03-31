@@ -85,17 +85,3 @@ func authHandler(handler http.HandlerFunc, username, password []byte, realm stri
 		handler(w, r)
 	}
 }
-
-// // authHandler wraps a handler function to provide http basic authentication.
-// func authHandler(handler http.HandlerFunc, username, password, realm string) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		u, p, ok := r.BasicAuth()
-// 		if !ok || u != username || p != password {
-// 			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
-// 			w.WriteHeader(http.StatusUnauthorized)
-// 			w.Write([]byte("401 Unauthorized\n"))
-// 			return
-// 		}
-// 		handler(w, r)
-// 	}
-// }
