@@ -70,15 +70,13 @@ func fileServer(dir string) http.HandlerFunc {
 }
 
 // authHandler wraps a handler function to provide http basic authentication.
-func authHandler(handler http.HandlerFunc, username, password []byte, realm string) http.HandlerFunc {
+func authHandler(handler http.HandlerFunc, userhash, passhash []byte, realm string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, pass, ok := r.BasicAuth()
-		userByt, passByt := hasher(user), hasher(pass)
-		if !ok || subtle.ConstantTimeCompare(userByt,
-			username) != 1 || subtle.ConstantTimeCompare(passByt, password) != 1 {
+		if !ok || subtle.ConstantTimeCompare(hasher(user),
+			userhash) != 1 || subtle.ConstantTimeCompare(hasher(pass), passhash) != 1 {
 			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`"`)
-			w.WriteHeader(http.StatusUnauthorized)
-			w.Write([]byte("Unauthorised.\n"))
+			http.Error(w, "Unauthorized.", http.StatusUnauthorized)
 			return
 		}
 		handler(w, r)
